@@ -5,8 +5,8 @@
 
 
 # 특징
+- 음원에서 데이터 분석, 특징 추출
 - 원시 음향 데이터 전처리
-- 음원에서 특징 추출
 - 기계 학습 모델의 훈련 및 평가
 - 결함 분류 및 예측
 - 결과 시각화
@@ -34,8 +34,58 @@ Stft로 분석한 신호를 Min-Max Scale로 정규화하여 학습 데이터를
 ## 모델 선택
     Convolutional AutoEncoder를 선택해 기계의 정상적인 신호를 학습하고 그로부터의 편차를 식별하여 이상 탐지를 할 수 있게 하였습니다.
 
+```
+class ConvAutoencoder(nn.Module):
+    def __init__(self):
+        super(ConvAutoencoder, self).__init__()
+        # 인코더 정의
+        self.encoder = nn.Sequential(
+            nn.Conv2d(3, k, kernel_size=3, stride=2, padding=1),  # 3x128x128 -> 16x64x64
+            nn.ReLU(),
+            nn.Conv2d(k, 2*k, kernel_size=3, stride=2, padding=1),  # 16x64x64 -> 32x32x32
+            nn.ReLU(),
+            nn.Conv2d(2*k, 4*k, kernel_size=3, stride=2, padding=1), 
+            nn.ReLU(),
+            nn.Conv2d(4*k, 8*k, kernel_size=3, stride=2, padding=1),
+            nn.ReLU()
+        )
+
+        # 디코더 정의
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(8*k, 4*k, kernel_size=2, stride=2), 
+            nn.ConvTranspose2d(4*k, 2*k, kernel_size=2, stride=2),
+            nn.ConvTranspose2d(2*k, k, kernel_size=2, stride=2),  # 32x32x32 -> 16x64x64
+            nn.ConvTranspose2d(k, 3, kernel_size=2, stride=2),  # 16x64x64 -> 3x128x128
+            nn.Sigmoid()
+            )
+
+    def forward(self, x):
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
+```
+
+
+
 ## 훈련(Training)
+    훈련 데이터와 검증 데이터는 과적합을 완화하고 K-Fold Cross-Validation를 적용하여 분리합니다.
+    손실 함수로 실제값과 예측값 사이의 평균 제곱 차이를 계산해 더 큰 오류를 loss값으로 하는 MSE(Mean Squared Error)를 사용하고, 최적화로 Adam을 사용합니다.
+
+```
+# 학습 데이터, 검증 데이터 분리
+kf = KFold(n_splits=5, shuffle=True)
+```
+
+```
+# 손실 함수와 옵티마이저
+criterion = nn.MSELoss()
+# criterion = nn.BCELoss()
+
+optimizer = optim.Adam(model.parameters(), lr=lr)
+```
 
 ## Validation 
     별도의 검증 세트에서 모델 성능을 검증합니다.
+
+
 
