@@ -18,16 +18,16 @@
 
 
 ## Time Domain 분석
-    Time Domain 분석에는 원시 음향 신호를 시간의 함수로 검사하여 전체 sampling rate가 16000HZ이고, 1277개의 10초 단위의 신호 데이터가 있음을 확인하였습니다.
+>Time Domain 분석에는 원시 음향 신호를 시간의 함수로 검사하여 전체 sampling rate가 16000HZ이고, 1277개의 10초 단위의 신호 데이터가 있음을 확인하였습니다.
 
 ## Frequency Domain 분석
-    Frequency Domain 분석은 시간 영역 신호를 주파수 영역으로 변환하여 신호의 주파수 구성 요소를 드러냅니다. 이는 푸리에 변환을 사용하여 수행됩니다. 결함 진단에 중요할 수 있는 기본 주파수 구성요소와 강도를 표시합니다. 전체 train_dataset에서 최대 주파수와 최소 주파수를 확인하였습니다. 
+>Frequency Domain 분석은 시간 영역 신호를 주파수 영역으로 변환하여 신호의 주파수 구성 요소를 드러냅니다. 이는 푸리에 변환을 사용하여 수행됩니다. 결함 진단에 중요할 수 있는 기본 주파수 구성요소와 강도를 표시합니다. 전체 train_dataset에서 최대 주파수와 최소 주파수를 확인하였습니다. 
 
 ## 상세한 분석을 위한 STFT
-    STFT(Short-Time Fourier Transform)는 시간에 지남에 따라 신호의 주파수 성분이 어떻게 변하는지 정보를 제공합니다. 고주파 대역의 신호에서 고장 신호가 존재 할 것으로 예측하였습니다.
+>STFT(Short-Time Fourier Transform)는 시간에 지남에 따라 신호의 주파수 성분이 어떻게 변하는지 정보를 제공합니다. 고주파 대역의 신호에서 고장 신호가 존재 할 것으로 예측하였습니다.
 
 ## 데이터 전처리
-Stft로 분석한 신호를 Min-Max Scale로 정규화하여 학습 데이터를 생성,
+>Stft로 분석한 신호를 Min-Max Scale로 정규화하여 학습 데이터를 생성,
 데이터 증강(Data Augmentation)을 통해 제한된 Dataset의 다양성을 증가시켰습니다.
 
 # Model Training
@@ -68,8 +68,8 @@ class ConvAutoencoder(nn.Module):
 
 
 ## 훈련(Training)
-    훈련 데이터와 검증 데이터는 과적합을 완화하고 K-Fold Cross-Validation를 적용하여 분리합니다.
-    손실 함수로 실제값과 예측값 사이의 평균 제곱 차이를 계산해 더 큰 오류를 loss값으로 하는 MSE(Mean Squared Error)를 사용하고, 최적화로 Adam을 사용합니다.
+>훈련 데이터와 검증 데이터는 과적합을 완화하고 K-Fold Cross-Validation를 적용하여 분리합니다.
+손실 함수로 실제값과 예측값 사이의 평균 제곱 차이를 계산해 더 큰 오류를 loss값으로 하는 MSE(Mean Squared Error)를 사용하고, 최적화로 Adam을 사용합니다.
 
 ```
 # 학습 데이터, 검증 데이터 분리
