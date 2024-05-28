@@ -32,7 +32,7 @@ Stft로 분석한 신호를 Min-Max Scale로 정규화하여 학습 데이터를
 
 # Model Training
 ## 모델 선택
-    Convolutional AutoEncoder를 선택해 기계의 정상적인 신호를 학습하고 그로부터의 편차를 식별하여 이상 탐지를 할 수 있게 하였습니다.
+>Convolutional AutoEncoder를 선택해 기계의 정상적인 신호를 학습하고 그로부터의 편차를 식별하여 이상 탐지를 할 수 있게 하였습니다.
 
 ```
 class ConvAutoencoder(nn.Module):
